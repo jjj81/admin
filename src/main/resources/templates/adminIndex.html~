@@ -1,0 +1,32 @@
+<html xmlns="http://www.thymeleaf.org">
+
+<head>
+
+</head>
+
+<body>
+	<h1>管理员主页</h1>
+	<fieldset>
+
+		<fieldset>
+			<legend>班级管理</legend>
+			<a th:href="@{/class/searchAll}">查询所有班级信息</a>
+			<p />
+			
+		</fieldset>
+		<fieldset>
+			<legend>教师对班级的权限管理</legend>
+		</fieldset>
+		<fieldset>
+			<legend>人员管理</legend>
+			<fieldset>
+				<legend>学生管理</legend>
+			</fieldset>
+			<fieldset>
+				<legend>老师管理</legend>
+			</fieldset>
+		</fieldset>
+	</fieldset>
+</body>
+
+</html>
