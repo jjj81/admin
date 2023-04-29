@@ -9,6 +9,7 @@
 					<th>标识符</th>
 					<th>班级名</th>
 					<th>删除</th>
+					<th>更新</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -19,11 +20,15 @@
 					<td><span th:text="${class.flagBit}">null</span></td>
 					<td><span th:text="${class.className}">null</span></td>
 					<td><a th:href="@{/class/delete/{flagBit}(flagBit=${class.flagBit})}">删除</a></td>
+					<td><a th:href="@{/class/getUpdatePage/{flagBit}(flagBit=${class.flagBit})}">更新</a></td>
 				</tr>
 			</tbody>
 		</table>
 		<p />
 		<a th:href="@{/admin/index}">返回管理员主页</a>
+		<p />
+		<a th:href="@{/class/getInsertPage}">添加班级</a>
+		   
 	</fieldset>
 
 </body>

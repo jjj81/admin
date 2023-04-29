@@ -1,0 +1,31 @@
+<html xmlns="http://www.thymeleaf.org">
+
+<body>
+	<fieldset>
+		<legend>数据库中已有的班级信息</legend>
+		<table>
+			<thead>
+				<tr>
+					<th>标识符</th>
+					<th>班级名</th>
+					<th>删除</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:if="${classesList.empty}">
+					<th colspan="2">班级表为空</th>
+				</tr>
+				<tr th:each="class:${classesList}">
+					<td><span th:text="${class.flagBit}">null</span></td>
+					<td><span th:text="${class.className}">null</span></td>
+					<td><a th:href="@{/class/delete/{flagBit}(flagBit=${class.flagBit})}">删除</a></td>
+				</tr>
+			</tbody>
+		</table>
+		<p />
+		<a th:href="@{/admin/index}">返回管理员主页</a>
+	</fieldset>
+
+</body>
+
+</html>
