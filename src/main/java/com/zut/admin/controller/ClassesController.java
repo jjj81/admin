@@ -45,6 +45,7 @@ public class ClassesController {
 	// u
 	@PostMapping("/update/{flagBit}")
 	String updateClassInfoByFlagBit(@PathVariable("flagBit") String flagBit, Model model, final Classes classes) {
+		classes.setFlagBit(flagBit);
 		classesInfoMapper.updateClassInfoByFlagBit(classes);
 		model.addAttribute("classesList", classesInfoMapper.searchAllClasses());
 		return "searchAllClasses";

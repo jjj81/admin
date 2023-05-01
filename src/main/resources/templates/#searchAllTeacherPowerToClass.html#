@@ -1,0 +1,28 @@
+<html xmlns="http://www.thymeleaf.org">
+<style>
+	table,
+	th,
+	td {
+		border: 1px solid black;
+	}
+
+</style>
+
+
+<body>
+	<h1>教师权限管理</h1>
+	<table>
+		<tr>
+			<th>教师工号</th>
+			<th>教师姓名</th>
+			<th>教师对哪些班级拥有权限管理</th>
+		</tr>
+		<tr th:each="teacherInfo:${teacherInfoList}">
+			<td th:text="${teacherInfo.teacherId}">null</td>
+			<td th:text="${teacherInfo.teacherName}">null</td>
+			<td th:text="${teacherInfo.powerToClass}">null</td>
+		</tr>
+	</table>
+</body>
+
+</html>
