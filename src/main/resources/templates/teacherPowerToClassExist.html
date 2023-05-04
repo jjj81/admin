@@ -1,0 +1,14 @@
+<html xmlns="http://www.thymeleaf.org">
+
+<body>
+	<h1><b>工号为：</b>
+		<b th:text="${teacherId}" />
+			<b>的教师已能管理</b>
+			<b th:text="${className}" />
+			<b> 请不要重复提交</b>
+	</h1>
+	<p />
+	<a th:href="@{/teacherPowerToClass/${teacherId}(teacherId=${teacherId})}">返回</a>
+</body>
+
+</html>

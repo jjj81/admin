@@ -11,23 +11,20 @@
 		<fieldset>
 			<legend>班级管理</legend>
 			<a th:href="@{/class/searchAll}">查询所有班级信息</a>
-			<p />
-			<a th:href="@{/class/getInsertPage}">添加班级</a>
 		</fieldset>
 		<fieldset>
 			<legend>教师对班级的权限管理</legend>
-			<a th:href="@{/teacherPowerToClass/searchAll}">查询所有的教师管理论权限</a>
+			<a th:href="@{/teacherPowerToClass/index}">查询所有的教师管理论权限</a>
 		</fieldset>
 		<fieldset>
-			<legend>人员管理</legend>
-			<fieldset>
-				<legend>学生管理</legend>
-			</fieldset>
-			<fieldset>
-				<legend>老师管理</legend>
-			</fieldset>
+			<legend>老师管理</legend>
+			<a th:href="@{/teacherInfo/index}">查找所有教师</a>
 		</fieldset>
-	</fieldset>
+
+		<fieldset>
+			<legend>刷题网站的选择与权值分配</legend>
+		</fieldset>
+
 </body>
 
 </html>

@@ -3,7 +3,7 @@
 	table,
 	th,
 	td {
-		border:1px solid black;
+		border: 1px solid black;
 	}
 
 </style>
@@ -20,7 +20,7 @@
 		<tr th:each="teacherInfo:${teacherInfoList}">
 			<td th:text="${teacherInfo.teacherId}">null</td>
 			<td th:text="${teacherInfo.teacherName}">null</td>
-			<td th:text="${teacherInfo.powerToClass}">null</td>
+			<td><a th:href="@{/teacherInfo/powerToClass/{teacherId}(teacherId=${teacherInfo.getTeacherId})}">查询</a></td>
 		</tr>
 	</table>
 </body>

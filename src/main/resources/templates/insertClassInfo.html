@@ -4,20 +4,6 @@
 	<fieldset>
 		<legend>添加班级信息</legend>
 		<form th:action="@{/class/insert}" th:object="${classInfo}" method="post">
-			<label> 请选择班级标识符号:</label>
-			<select th:field="*{flagBit}">
-				<option value="0">0</option>
-				<option value="1">1</option>
-				<option value="2">2</option>
-				<option value="3">3</option>
-				<option value="4">4</option>
-				<option value="5">5</option>
-				<option value="6">6</option>
-				<option value="7">7</option>
-				<option value="8">8</option>
-				<option value="9">9</option>
-			</select>
-			<p />
 			<label>请填写班级名:</label>
 			<input type="text" th:field="*{className}" required>
 			<p />

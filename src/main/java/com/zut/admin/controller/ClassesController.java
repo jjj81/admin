@@ -17,7 +17,6 @@ public class ClassesController {
 	@Autowired
 	private ClassesInfoMapper classesInfoMapper;
 
-	// c
 	@GetMapping("/getInsertPage")
 	String getInsertPate(Model model) {
 		model.addAttribute("classInfo", new Classes());
@@ -26,8 +25,6 @@ public class ClassesController {
 
 	@PostMapping("/insert")
 	String insertClassesInfo(Model model, Classes classes) {
-		if (classesInfoMapper.searchByFlagBit(classes.getFlagBit()) != null)
-			return "flagBitExist";
 		if (classesInfoMapper.searchByClassName(classes.getClassName()) != null)
 			return "classNameExist";
 		classesInfoMapper.insertClassesInfo(classes);
@@ -35,36 +32,16 @@ public class ClassesController {
 		return "searchAllClasses";
 	}
 
-	// r
 	@GetMapping("/searchAll")
 	String searchAllClasses(Model model) {
 		model.addAttribute("classesList", classesInfoMapper.searchAllClasses());
 		return "searchAllClasses";
 	}
 
-	// u
-	@PostMapping("/update/{flagBit}")
-	String updateClassInfoByFlagBit(@PathVariable("flagBit") String flagBit, Model model, final Classes classes) {
-		classes.setFlagBit(flagBit);
-		classesInfoMapper.updateClassInfoByFlagBit(classes);
-		model.addAttribute("classesList", classesInfoMapper.searchAllClasses());
-		return "searchAllClasses";
-	}
+	@GetMapping("/delete/{className}")
+	public String deleteClassInfoByFlagBit(@PathVariable("className") String className, Model model) {
 
-	@GetMapping("/getUpdatePage/{flagBit}")
-	String getUpdatePage(@PathVariable("flagBit") String flagBit, Model model) {
-		Classes classes = new Classes();
-		classes.setFlagBit(flagBit);
-		model.addAttribute("classInfo", classes);
-		return "updateClassInfo";
-	}
-
-	// d
-	@GetMapping("/delete/{flagBit}")
-	public String deleteClassInfoByFlagBit(@PathVariable("flagBit") String flagBit, Model model) {
-
-		classesInfoMapper.deleteClassInfoByFlagBit(flagBit);
-
+		classesInfoMapper.deleteClassInfoByClassName(className);
 		model.addAttribute("classesList", classesInfoMapper.searchAllClasses());
 		return "searchAllClasses";
 	}

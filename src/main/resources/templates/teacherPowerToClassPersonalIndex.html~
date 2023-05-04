@@ -1,0 +1,26 @@
+<html xmlns="http://www.thymeleaf.org">
+
+<body>
+	<h1>教师能管理的班级</h1>
+	<fieldset>
+		<table>
+			<tr>
+				<th>工号</th> <!--  -->
+				<th>能管理的班级</th>
+				<th>删除</th>
+			</tr>
+			<tr th:each="power:${powerToClassList}">
+				<td th:text="${power.teacherId}">null</td>
+				<td th:text="${power.className}">null</td>
+				<td><a
+						th:href="@{/teacherPowerToClass/delete(className=${power.className},teacherId=${power.teacherId})}">删除</a>
+				</td>
+			</tr>
+		</table>
+	</fieldset>
+	<a th:href="@{/teacherPowerToClass/getInsertPage/{teacherId}(teacherId=${teacherId})}">添加班级</a>
+	<p />
+	<a th:href="@{/teacherPowerToClass/index}">教师权限管理</a>
+</body>
+
+</html>

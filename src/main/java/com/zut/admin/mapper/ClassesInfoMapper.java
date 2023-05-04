@@ -12,22 +12,16 @@ import org.apache.ibatis.annotations.Update;
 
 @Mapper
 public interface ClassesInfoMapper {
-	@Insert("insert into classes(flagBit,className) values(#{flagBit},#{className})")
+	@Insert("insert into classes(className) values(#{className})")
 	void insertClassesInfo(Classes classes);
 
 	@Select("select * from classes")
 	List<Classes> searchAllClasses();
 
-	@Select("select * from classes where flagBit=#{flagBit}")
-	Classes searchByFlagBit(String flagBit);
-
 	@Select("select * from classes where className=#{className}")
 	Classes searchByClassName(String className);
 
-	@Delete("delete from classes where flagBit=#{flagBit}")
-	void deleteClassInfoByFlagBit(String flagBit);
-
-	@Update("update classes set flagBit=#{flagBit} , className=#{className} where flagBit=#{flagBit}")
-	void updateClassInfoByFlagBit(Classes classes);
+	@Delete("delete from classes where className=#{className}")
+	void deleteClassInfoByClassName(String className);
 
 }

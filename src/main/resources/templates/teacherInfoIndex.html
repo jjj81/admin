@@ -1,0 +1,32 @@
+<html xmlns="http://www.thymeleaf.org">
+
+<body>
+	<h1>教师信息管理</h1>
+	<fieldset>
+		<legend>添加老师</legend>
+		<form th:action="@{/teacherInfo/insert}" th:object="${teacher}" method="post">
+			<lable>请添加工号：</lable>
+			<input type="text" maxlength="12" minlength="12" th:field="*{teacherId}" placeholder="12位数字" required>
+			<p />
+			<input type="submit" value="提交">
+		</form>
+	</fieldset>
+
+	<fieldset>
+		<legend>查询所有教师信息</legend>
+
+		<table>
+			<tr>
+				<th>教师工号</th>
+				<th>删除</th>
+			</tr>
+			<tr th:each="teacherInfo:${teacherInfoList}">
+				<td th:text="${teacherInfo.teacherId}">null</td>
+				<td><a th:href="@{/teacherInfo/delete/{teacherId}(teacherId=${teacherInfo.teacherId})}">删除</a></td>
+			</tr>
+		</table>
+	</fieldset>
+	<a th:href="@{/admin/index}">返回管理员主页</a>
+</body>
+
+</html>
