@@ -8,7 +8,7 @@
 	</h1>
 	<fieldset>
 		<legend>添加班级</legend>
-		<form th:action="@{/teacherPowerToClass/insert(teachId=${teacherId},className=${powerToClass.className})}" th:object="${powerToClass}"
+		<form th:action="@{/teacherPowerToClass/insert(teacherId=${teacherId})}" th:object="${powerToClass}"
 			method="post">
 			<label>添加教师能管理的班级:</label>
 			<select th:field="*{className}">
@@ -37,6 +37,8 @@
 	</fieldset>
 	<p />
 	<a th:href="@{/teacherPowerToClass/index}">教师权限管理</a>
+	<p />
+	<a th:href="@{/admin/index}">返回管理员页面</a>
 </body>
 
 </html>

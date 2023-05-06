@@ -42,14 +42,25 @@ public class TeacherPowerToClassController {
 	@PostMapping("/insert")
 	String insertPowerToClass(final TeacherPowerToClass teacherPowerToClass, Model model,
 			@RequestParam("teacherId") String teacherId) {
+
+		for (TeacherPowerToClass t : teacherPowerToClassMapper.searchTeacherByTeacherId(teacherId)) {
+			if (t.getClassName().equals(teacherPowerToClass.getClassName()) == true) {
+				model.addAttribute("powerToClass", new TeacherPowerToClass());
+				model.addAttribute("classList", classesInfoMapper.searchAllClasses());
+				model.addAttribute("powerToClassList", teacherPowerToClassMapper.searchTeacherByTeacherId(teacherId));
+				model.addAttribute("teacherId", teacherId);
+
+				return "teacherPowerToClassExist";
+			}
+		}
+
+		teacherPowerToClass.setTeacherId(teacherId);
+		teacherPowerToClassMapper.insertPowerToClass(teacherPowerToClass);
+
 		model.addAttribute("powerToClass", new TeacherPowerToClass());
 		model.addAttribute("classList", classesInfoMapper.searchAllClasses());
 		model.addAttribute("powerToClassList", teacherPowerToClassMapper.searchTeacherByTeacherId(teacherId));
 		model.addAttribute("teacherId", teacherId);
-
-
-		teacherPowerToClass.setTeacherId(teacherId);
-		teacherPowerToClassMapper.insertPowerToClass(teacherPowerToClass);
 
 		return "teacherPowerToClassPersonalIndex";
 

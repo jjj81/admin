@@ -2,6 +2,7 @@ package com.zut.admin.controller;
 
 import com.zut.admin.entity.TeacherInfo;
 import com.zut.admin.mapper.TeacherInfoMapper;
+import com.zut.admin.mapper.TeacherPowerToClassMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -18,6 +19,9 @@ public class TeacherInfoController {
 	@Autowired
 	private TeacherInfoMapper teacherInfoMapper;
 
+    @Autowired
+    private TeacherPowerToClassMapper teacherPowerToClassMapper;
+
 	BCryptPasswordEncoder bcrCryptPasswordEncoder = new BCryptPasswordEncoder();
 	@GetMapping("/index")
 	String getTeacherIndexPage(Model model) {
@@ -30,6 +34,7 @@ public class TeacherInfoController {
 	@GetMapping("/delete/{teacherId}")
 	String deleteTeacherInfoByTeacerhId(Model model, @PathVariable("teacherId") String id) {
 		teacherInfoMapper.deleteTeacherInfoByTeacherId(id);
+		teacherPowerToClassMapper.deleteTeacherPowerToClassByTeacherId(id);
 		model.addAttribute("teacher", new TeacherInfo());
 		model.addAttribute("teacherInfoList", teacherInfoMapper.searchAllTeacher());
 		return "teacherInfoIndex";

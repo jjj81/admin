@@ -1,6 +1,7 @@
 package com.zut.admin.controller;
 
 import com.zut.admin.entity.Classes;
+import com.zut.admin.entity.TeacherInfo;
 import com.zut.admin.mapper.ClassesInfoMapper;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,33 +18,31 @@ public class ClassesController {
 	@Autowired
 	private ClassesInfoMapper classesInfoMapper;
 
-	@GetMapping("/getInsertPage")
-	String getInsertPate(Model model) {
-		model.addAttribute("classInfo", new Classes());
-		return "insertClassInfo";
-	}
 
 	@PostMapping("/insert")
 	String insertClassesInfo(Model model, Classes classes) {
 		if (classesInfoMapper.searchByClassName(classes.getClassName()) != null)
 			return "classNameExist";
 		classesInfoMapper.insertClassesInfo(classes);
+		model.addAttribute("classInfo", new Classes());
 		model.addAttribute("classesList", classesInfoMapper.searchAllClasses());
-		return "searchAllClasses";
+		return "classInfoIndex";
 	}
 
 	@GetMapping("/searchAll")
 	String searchAllClasses(Model model) {
+		model.addAttribute("classInfo", new Classes());
 		model.addAttribute("classesList", classesInfoMapper.searchAllClasses());
-		return "searchAllClasses";
+		return "classInfoIndex";
 	}
 
 	@GetMapping("/delete/{className}")
 	public String deleteClassInfoByFlagBit(@PathVariable("className") String className, Model model) {
 
 		classesInfoMapper.deleteClassInfoByClassName(className);
+		model.addAttribute("classInfo", new Classes());
 		model.addAttribute("classesList", classesInfoMapper.searchAllClasses());
-		return "searchAllClasses";
+		return "classInfoIndex";
 	}
 
 }

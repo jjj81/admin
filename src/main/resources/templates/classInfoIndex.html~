@@ -2,6 +2,19 @@
 
 
 <body>
+	<h1>班级管理</h1>
+	<fieldset>
+		<legend>添加班级信息</legend>
+		<form th:action="@{/class/insert}" th:object="${classInfo}" method="post">
+			<label>请填写班级名:</label>
+			<input type="text" th:field="*{className}" required>
+			<p />
+			<input type="submit" value="写入信息">
+		</form>
+		<a th:href="@{/admin/index}">返回管理员主页</a>
+	</fieldset>
+
+
 	<fieldset>
 		<legend>数据库中已有的班级信息</legend>
 		<table>
@@ -23,9 +36,6 @@
 		</table>
 		<p />
 		<a th:href="@{/admin/index}">返回管理员主页</a>
-		<p />
-		<a th:href="@{/class/getInsertPage}">添加班级</a>
-
 	</fieldset>
 
 </body>

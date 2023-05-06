@@ -1,4 +1,3 @@
-
 package com.zut.admin.mapper;
 
 import org.apache.ibatis.annotations.Delete;
@@ -24,7 +23,7 @@ public interface TeacherPowerToClassMapper {
 	@Delete("delete from teacherPowerToClass where className=#{className}")
 	void deleteTeacherPowerToClassByClassName(String className);
 
-	@Select("select * from teacherPowerToClass where teacherId=#{teacherId}")
-	TeacherPowerToClass selectTeacherPowerToClassById(String teacherId);
+	@Delete("delete from teacherPowerToClass where teacherId=#{teacherId}")
+	void deleteTeacherPowerToClassByTeacherId(String teacherId);
 
 }

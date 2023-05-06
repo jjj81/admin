@@ -1,0 +1,42 @@
+<html xmlns="http://www.thymeleaf.org">
+
+
+<body>
+	<h1>班级管理</h1>
+	<fieldset>
+		<legend>添加班级信息</legend>
+		<form th:action="@{/class/insert}" th:object="${classInfo}" method="post">
+			<label>请填写班级名:</label>
+			<input type="text" th:field="*{className}" required>
+			<p />
+			<input type="submit" value="写入信息">
+		</form>
+	</fieldset>
+
+
+	<fieldset>
+		<legend>数据库中已有的班级信息</legend>
+		<table>
+			<thead>
+				<tr>
+					<th>班级名</th>
+					<th>删除</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:if="${classesList.empty}">
+					<th colspan="2">班级表为空</th>
+				</tr>
+				<tr th:each="class:${classesList}">
+					<td><span th:text="${class.className}">null</span></td>
+					<td><a th:href="@{/class/delete/{className}(className=${class.className})}">删除</a></td>
+				</tr>
+			</tbody>
+		</table>
+		<p />
+		<a th:href="@{/admin/index}">返回管理员主页</a>
+	</fieldset>
+
+</body>
+
+</html>
