@@ -19,10 +19,11 @@ public class TeacherInfoController {
 	@Autowired
 	private TeacherInfoMapper teacherInfoMapper;
 
-    @Autowired
-    private TeacherPowerToClassMapper teacherPowerToClassMapper;
+	@Autowired
+	private TeacherPowerToClassMapper teacherPowerToClassMapper;
 
 	BCryptPasswordEncoder bcrCryptPasswordEncoder = new BCryptPasswordEncoder();
+
 	@GetMapping("/index")
 	String getTeacherIndexPage(Model model) {
 		model.addAttribute("teacher", new TeacherInfo());

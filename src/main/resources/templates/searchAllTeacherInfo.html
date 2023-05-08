@@ -8,10 +8,13 @@
 			<tr>
 				<th>教师工号</th>
 				<th>教师对哪些班级拥有权限管理</th>
+				<th>申请管理哪些班级</th>
 			</tr>
 			<tr th:each="teacherInfo : ${teacherInfoList}">
-				<td th:text="${teacherInfo.teacherId}">null</td>
+				<td th:text="${teacherInfo.teacherId}">
 				<td><a th:href="@{/teacherPowerToClass/{teacherId}(teacherId=${teacherInfo.getTeacherId})}">查询</a></td>
+				<td th:text="${teacherInfo.wantToManageClass}">
+
 			</tr>
 		</table>
 	</fieldset>
