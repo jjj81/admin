@@ -1,0 +1,53 @@
+<html xmlns="http://www.thymeleaf.org">
+
+
+<body>
+	<h1>teacherPowerToClass</h1>
+	<fieldset>
+		<legend>search</legend>
+		<table>
+			<tr>
+				<th>工号</th>
+				<th>班级名</th>
+				<th>系</th>
+				<th>学院</th>
+				<th>删除</th>
+			</tr>
+			<tr th:each="p:${powerToClassList}">
+				<td th:text="${p.teacherId}">null</td>
+				<td th:text="${p.clazzId}">null</td>
+				<td><a th:href="@{/teacherPowerToClass/delete(clazzId=${p.clazzId},teacherId=${p.teacherId})}">删除</a>
+				</td>
+			</tr>
+		</table>
+	</fieldset>
+	<fieldset>
+		<legend>insert</legend>
+		<form th:action="@{/teacherPowerToClass/fixTheFaculty(teacherId=${teacherId})}" th:object="${college}" method="post">
+			<label>选择学院</label>
+			<select th:field="*{id}">
+				<option th:each="c:${collegeList}" th:value="${c.id}" th:text="${c.college}">
+				</option>
+			</select>
+			<input type="submit" value="确定">
+		</form>
+		<form th:action="@{/teacherPowerToClass/fixTheClazz(teacherId=${teacherId})}" th:object="${faculty}" method="post">
+			<label>选择专业</label>
+			<select th:field="*{id}">
+				<option th:each="f:${facultyList}" th:value="${f.id}" th:text="${f.faculty}">
+			</select>
+			<input type="submit" value="确定">
+		</form>
+		<form th:action="@{/teacherPowerToClass/insert(teacherId=${teacherId})}" th:object="${clazz}" method="post">
+			<label>选择班级</label>
+			<select th:field="*{id}">
+				<option th:each="c:${clazzList}" th:value="${c.id}" th:text="${c.clazz}">
+			</select>
+			<input type="submit" value="确定">
+		</form>
+	</fieldset>
+
+	<a th:href="@{/teacherInfo/index}">返回</a>
+</body>
+
+</html>

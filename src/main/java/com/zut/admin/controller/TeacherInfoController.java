@@ -1,6 +1,8 @@
 package com.zut.admin.controller;
 
+import com.zut.admin.entity.College;
 import com.zut.admin.entity.TeacherInfo;
+import com.zut.admin.mapper.ClazzMapper;
 import com.zut.admin.mapper.TeacherInfoMapper;
 import com.zut.admin.mapper.TeacherPowerToClassMapper;
 
@@ -22,34 +24,79 @@ public class TeacherInfoController {
 	@Autowired
 	private TeacherPowerToClassMapper teacherPowerToClassMapper;
 
+	@Autowired
+	private ClazzMapper clazzMapper;
+
 	BCryptPasswordEncoder bcrCryptPasswordEncoder = new BCryptPasswordEncoder();
 
 	@GetMapping("/index")
 	String getTeacherIndexPage(Model model) {
-		model.addAttribute("teacher", new TeacherInfo());
-		model.addAttribute("teacherInfoList", teacherInfoMapper.searchAllTeacher());
 
+		model.addAttribute("teacherInfoList", teacherInfoMapper.searchAllTeacher());
+		model.addAttribute("collegeList", clazzMapper.selectAllCollege());
+		model.addAttribute("college", new College());
+		model.addAttribute("facultyList", null);
+		model.addAttribute("teacher", new TeacherInfo());
 		return "teacherInfoIndex";
 	}
 
 	@GetMapping("/delete/{teacherId}")
 	String deleteTeacherInfoByTeacerhId(Model model, @PathVariable("teacherId") String id) {
+		if (teacherPowerToClassMapper.searchTeacherByTeacherId(id).isEmpty() == false) {
+			model.addAttribute("powerExist", "该老师仍有能管理的班级，请清除这些班级后再来进行删除操作！！！");
+			model.addAttribute("collegeList", clazzMapper.selectAllCollege());
+			model.addAttribute("college", new College());
+			model.addAttribute("facultyList", null);
+			model.addAttribute("teacher", new TeacherInfo());
+			model.addAttribute("teacherInfoList", teacherInfoMapper.searchAllTeacher());
+			return "teacherInfoIndex";
+		}
 		teacherInfoMapper.deleteTeacherInfoByTeacherId(id);
-		teacherPowerToClassMapper.deleteTeacherPowerToClassByTeacherId(id);
+		model.addAttribute("collegeList", clazzMapper.selectAllCollege());
+		model.addAttribute("college", new College());
+		model.addAttribute("facultyList", null);
 		model.addAttribute("teacher", new TeacherInfo());
 		model.addAttribute("teacherInfoList", teacherInfoMapper.searchAllTeacher());
 		return "teacherInfoIndex";
 	}
 
-	@PostMapping("/insert")
-	String insertTeacherIdAndPassWord(Model model, final TeacherInfo teacherInfo) {
-		if (teacherInfoMapper.selectTeacherInfoById(teacherInfo.getTeacherId()) != null)
-			return "teacherIdExist";
+	@PostMapping("/insert/{collegeId}")
+	String insertTeacherIdAndPassWord(Model model, TeacherInfo teacherInfo,
+			@PathVariable("collegeId") Integer collegeId) {
+		if (teacherInfoMapper.selectTeacherInfoById(teacherInfo.getTeacherId()) != null) {
+			model.addAttribute("userExist", "该工号已有实例！！！！");
+			model.addAttribute("facultyList", null);
+			model.addAttribute("collegeList", clazzMapper.selectAllCollege());
+			model.addAttribute("teacher", new TeacherInfo());
+			model.addAttribute("college", new College());
+			model.addAttribute("teacherInfoList", teacherInfoMapper.searchAllTeacher());
+			return "teacherInfoIndex";
+
+		}
+
 		teacherInfo.setPassWord(bcrCryptPasswordEncoder.encode(teacherInfo.getTeacherId()));
-		teacherInfoMapper.insertTeacherIdAndPassWord(teacherInfo);
+		teacherInfo.setCollege(clazzMapper.selectCollegeById2(collegeId).getCollege());
+		teacherInfoMapper.insertTeacherInfo(teacherInfo);
+
+		model.addAttribute("facultyList", null);
+		model.addAttribute("collegeList", clazzMapper.selectAllCollege());
 		model.addAttribute("teacher", new TeacherInfo());
+		model.addAttribute("college", new College());
 		model.addAttribute("teacherInfoList", teacherInfoMapper.searchAllTeacher());
 		return "teacherInfoIndex";
+
 	}
 
+	@PostMapping("/fixTheFaculty")
+	String fixTheFaculty(Model model, final College college) {
+
+		model.addAttribute("teacherInfoList", teacherInfoMapper.searchAllTeacher());
+		model.addAttribute("facultyList", clazzMapper.selectFacultyByParentId(college.getId()));
+		model.addAttribute("collegeList", clazzMapper.selectAllCollege());
+		model.addAttribute("college", new College());
+		model.addAttribute("collegeId", college.getId());
+		model.addAttribute("teacher", new TeacherInfo());
+		return "teacherInfoIndex";
+
+	}
 }

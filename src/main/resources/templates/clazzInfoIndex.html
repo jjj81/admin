@@ -1,0 +1,96 @@
+<html xmlns="http://www.thymeleaf.org"> <!--  -->
+
+
+<body>
+	<h1>组织关系管理</h1>
+	<fieldset>
+		<legend>search</legend>
+		<fieldset>
+			<legend>已有班级</legend>
+			<table>
+				<tr>
+					<th>班级名</th>
+					<th>系</th>
+					<th>学院</th>
+					<th>删除班级</th>
+				</tr>
+				<tr th:each="clazz:${selectAllClazz}">
+					<td th:text="${clazz.clazz}">
+					<td th:text="${clazz.faculty}">
+					<td th:text="${clazz.college}">
+					<td><a th:href="@{/clazz/delete/{clazzId}(clazzId=${clazz.clazzId})}">删除</a></td>
+				</tr>
+
+			</table>
+		</fieldset>
+		<fieldset>
+			<legend>系管理</legend>
+			<span th:if="${classIsNotNull}" th:text="${classIsNotNull}" style="color:red">
+			</span>
+			<table>
+
+				<tr>
+					<th>系</th>
+					<th>修改系名</th>
+					<th>学院</th>
+					<th>删除系</th>
+				</tr>
+				<tr th:each="faculty:${selectAllFaculty}">
+					<td th:text="${faculty.faculty}">
+					<td>
+						<form th:action="@{/clazz/updateFaculty/{facultyId}(facultyId=${faculty.facultyId})}" th:object="${faculty}"
+							method="post">
+							<input type="text" placeholder="修改系名" th:field="*{faculty}">
+							<input type="submit" value="修改">
+						</form>
+					</td>
+					<td th:text="${faculty.college}">
+					<td><a th:href="@{/clazz/deleteFaculty/{facultyId}(facultyId=${faculty.facultyId})}">删除</a></td>
+				</tr>
+			</table>
+
+		</fieldset>
+
+	</fieldset>
+	<fieldset>
+		<legend>insert</legend>
+		<fieldset>
+			<legend>添加专业
+			</legend>
+			<form th:action="@{/clazz/insertFaculty}" th:object="${faculty}" method="post">
+				<label>选择学院</label>
+				<select th:field="*{parentId}">
+					<option th:each="college:${collegeList}" th:value="${college.id}" th:text="${college.college}">
+				</select>
+				<label>专业名:</label>
+				<input type="text" th:field="*{faculty}" required>
+				<input type="submit" value="添加">
+			</form>
+		</fieldset>
+		<fieldset>
+			<legend>添加班级</legend>
+			<form th:action="@{/clazz/selectFacultyByParentId}" th:object="${faculty}" method="post">
+				<label>选择学院</label>
+				<select th:field="*{parentId}">
+					<option th:each="college:${collegeList}" th:value="${college.id}" th:text="${college.college}">
+				</select>
+				<input type="submit" value="确认">
+			</form>
+			<form th:action="@{/clazz/insertClazz}" th:object="${clazz}" method="post">
+				<label>选择专业</label>
+				<select th:field="*{parentId}">
+					<option th:each="faculty:${facultyList}" th:value="${faculty.id}" th:text="${faculty.faculty}">
+				</select>
+				<label>班级名：</label>
+				<input type="text" th:field="*{clazz}" required>
+				<input type="submit" value="添加">
+			</form>
+		</fieldset>
+
+	</fieldset>
+
+	<a th:href="@{/admin/index}">返回管理员主页</a>
+
+</body>
+
+</html>

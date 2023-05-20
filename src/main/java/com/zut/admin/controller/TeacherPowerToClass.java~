@@ -1,0 +1,35 @@
+package com.zut.admin.controller;
+
+import com.zut.admin.entity.Clazz;
+import com.zut.admin.entity.College;
+import com.zut.admin.entity.Faculty;
+import com.zut.admin.mapper.ClazzMapper;
+import com.zut.admin.mapper.TeacherPowerToClassMapper;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+@RequestMapping("/teacherPowerToClass")
+public class TeacherPowerToClass {
+	@Autowired
+	private TeacherPowerToClassMapper teacherPowerToClassMapper;
+
+	@Autowired
+	private ClazzMapper clazzMapper;
+
+	@GetMapping("/{teacherId}")
+	String getIndex(@PathVariable("teacherId") String teacherId, Model model) {
+		model.addAttribute("powerToClassList", teacherPowerToClassMapper.searchAllTeacherInfo());
+		model.addAttribute("collegeList", clazzMapper.selectAllCollege());
+		model.addAttribute("college", new College());
+		model.addAttribute("faculty", new Faculty());
+		model.addAttribute("clazz", new Clazz());
+		return "teacherPowerToClass";
+	}
+
+}

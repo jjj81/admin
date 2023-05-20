@@ -1,8 +1,8 @@
 package com.zut.admin.entity;
 
-public class TeacherPowerToClass{
+public class TeacherPowerToClass {
 	private String teacherId;
-	private String className;
+	private Integer clazzId;
 
 	public String getTeacherId() {
 		return teacherId;
@@ -12,12 +12,12 @@ public class TeacherPowerToClass{
 		this.teacherId = teacherId;
 	}
 
-	public String getClassName() {
-		return className;
+	public Integer getClazzId() {
+		return clazzId;
 	}
 
-	public void setClassName(String className) {
-		this.className = className;
+	public void setClazzId(Integer clazzId) {
+		this.clazzId = clazzId;
 	}
 
 }

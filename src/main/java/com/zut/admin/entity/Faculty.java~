@@ -1,0 +1,5 @@
+package com.zut.admin.entity;
+
+public class College {
+
+}

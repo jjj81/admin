@@ -9,8 +9,12 @@
 	<fieldset>
 
 		<fieldset>
-			<legend>组织关系管理</legend>
-			<a th:href="@{/clazz/index}">查询</a>
+			<legend>班级管理</legend>
+			<a th:href="@{/class/searchAll}">查询所有班级信息</a>
+		</fieldset>
+		<fieldset>
+			<legend>教师对班级的权限管理</legend>
+			<a th:href="@{/teacherPowerToClass/index}">查询所有的教师管理论权限</a>
 		</fieldset>
 		<fieldset>
 			<legend>老师管理</legend>
@@ -18,7 +22,7 @@
 		</fieldset>
 
 		<fieldset>
-			<legend>刷题网站与权值分配</legend>
+			<legend>刷题网站与权值分配</l
 			<a th:href="@{/urlAndPowerInfo/index}">urlAndPower</a>
 		</fieldset>
 

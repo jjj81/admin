@@ -18,8 +18,8 @@ public interface TeacherInfoMapper {
 	@Delete("delete from teacherLoginInfo where teacherId=#{teacherId}")
 	void deleteTeacherInfoByTeacherId(String teacherId);
 
-	@Insert("insert into teacherLoginInfo(teacherId,passWord) values(#{teacherId},#{passWord})")
-	void insertTeacherIdAndPassWord(TeacherInfo teacherInfo);
+	@Insert("insert into teacherLoginInfo(teacherId,passWord,teacherName,college,faculty) values(#{teacherId},#{passWord},#{teacherName},#{college},#{faculty})")
+	void insertTeacherInfo(TeacherInfo teacherInfo);
 
 	@Select("select * from teacherLoginInfo where teacherId=#{teacherId}")
 	TeacherInfo selectTeacherInfoById(String teacherId);

@@ -18,6 +18,7 @@
 		<fieldset>
 			<legend>
 				管理员登陆页面</legend>
+			<scan style="color: red;" th:if="${passWordError}" th:text="${passWordError}"></scan>
 			<form th:object="${passWordInfo}" method="post" th:action="@{/login/confirm}">
 				<label>密码：</label>
 				<input type="password" placeholder="密码" th:field="*{passWord}" required>

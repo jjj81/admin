@@ -1,0 +1,20 @@
+
+package com.zut.admin.mapper;
+
+import org.apache.ibatis.annotations.*;
+import java.util.*;
+
+import com.zut.admin.entity.UrlAndPowerInfo;
+
+@Mapper
+public interface UrlAndPowerInfoMapper {
+
+	@Select("select * from webSiteUrlAndPower")
+	List<UrlAndPowerInfo> selectAll();
+
+	@Insert("insert into webSiteUrlAndPower(webSiteUrl,urlPower) values(#{webSiteUrl},#{urlPower})")
+	void insertInfo(UrlAndPowerInfo urlAndPowerInfo);
+
+	@Delete("delete from webSiteUrlAndPower where webSiteUrl=#{webSiteUrl}")
+	void delelteInfo(String webSiteUrl);
+}

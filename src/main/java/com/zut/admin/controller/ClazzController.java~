@@ -1,0 +1,144 @@
+package com.zut.admin.controller;
+
+import com.zut.admin.entity.Clazz;
+import com.zut.admin.entity.Faculty;
+import com.zut.admin.mapper.ClazzMapper;
+import com.zut.admin.service.OrganizationService;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+@RequestMapping("/clazz")
+public class ClazzController {
+
+	@Autowired
+	private ClazzMapper clazzMapper;
+	@Autowired
+	private OrganizationService organizationService;
+
+	@GetMapping("/index")
+	String getIndex(Model model) {
+		// select
+		model.addAttribute("selectAllClazz", organizationService.upGetAllInfo(clazzMapper.selectAllClazz()));
+		model.addAttribute("selectAllFaculty", organizationService.facultyUpGetAllInfo(clazzMapper.selectAllFaculty()));
+
+		// insert
+		model.addAttribute("clazz", new Clazz());
+		model.addAttribute("facultyList", null);
+		model.addAttribute("faculty", new Faculty());
+		model.addAttribute("collegeList", clazzMapper.selectAllCollege());
+		return "clazzInfoIndex";
+	}
+
+	@PostMapping("/insertFaculty")
+	String insertFaculty(Model model, final Faculty faculty) {
+		clazzMapper.insertFaculty(faculty);
+
+		model.addAttribute("selectAllClazz", organizationService.upGetAllInfo(clazzMapper.selectAllClazz()));
+		model.addAttribute("selectAllFaculty", organizationService.facultyUpGetAllInfo(clazzMapper.selectAllFaculty()));
+
+		model.addAttribute("clazz", new Clazz());
+		model.addAttribute("facultyList", null);
+		model.addAttribute("faculty", new Faculty());
+		model.addAttribute("collegeList",
+				organizationService.addListToList(clazzMapper.selectCollegeById(faculty.getParentId())));
+
+		return "clazzInfoIndex";
+	}
+
+	@PostMapping("/selectFacultyByParentId")
+	String selectFacultyByParentId(Model model, final Faculty faculty) {
+
+		model.addAttribute("selectAllClazz", organizationService.upGetAllInfo(clazzMapper.selectAllClazz()));
+		model.addAttribute("selectAllFaculty", organizationService.facultyUpGetAllInfo(clazzMapper.selectAllFaculty()));
+
+		model.addAttribute("clazz", new Clazz());
+		model.addAttribute("facultyList", clazzMapper.selectFacultyByParentId(faculty.getParentId()));
+		model.addAttribute("faculty", new Faculty());
+		model.addAttribute("collegeList",
+				organizationService.addListToList(clazzMapper.selectCollegeById(faculty.getParentId())));
+
+		return "clazzInfoIndex";
+	}
+
+	@PostMapping("/insertClazz")
+	String selectClazz(Model model, final Clazz clazz) {
+
+		clazzMapper.insertClazz(clazz);
+
+		model.addAttribute("selectAllClazz", organizationService.upGetAllInfo(clazzMapper.selectAllClazz()));
+		model.addAttribute("selectAllFaculty", organizationService.facultyUpGetAllInfo(clazzMapper.selectAllFaculty()));
+
+		model.addAttribute("clazz", new Clazz());
+		model.addAttribute("facultyList", clazzMapper.selectFacultyByClazzParentId(clazz.getParentId()));
+		model.addAttribute("faculty", new Faculty());
+		model.addAttribute("collegeList",
+				organizationService.addListToList(clazzMapper.selectCollegeById(
+						clazzMapper.selectFacultyByClazzParentId(clazz.getParentId()).getParentId())));
+
+		return "clazzInfoIndex";
+	}
+
+	@GetMapping("/delete/{clazzId}")
+	String deleteByClazz(Model model, @PathVariable("clazzId") String clazzId) {
+
+		clazzMapper.deleteClazzByClazz(clazzId);
+
+		model.addAttribute("selectAllClazz", organizationService.upGetAllInfo(clazzMapper.selectAllClazz()));
+		model.addAttribute("selectAllFaculty", organizationService.facultyUpGetAllInfo(clazzMapper.selectAllFaculty()));
+
+		model.addAttribute("clazz", new Clazz());
+		model.addAttribute("facultyList", null);
+		model.addAttribute("faculty", new Faculty());
+		model.addAttribute("collegeList", clazzMapper.selectAllCollege());
+		return "clazzInfoIndex";
+	}
+
+	@GetMapping("/deleteFaculty/{facultyId}")
+	String deleteByFacultyId(Model model, @PathVariable("facultyId") String facultyId) {
+		if (clazzMapper.selectClazzByFacultyId(facultyId).isEmpty() != true) {
+			model.addAttribute("classIsNotNull", "该系下有班级存在，请将系下的班级 处理后再删除!!!");
+			model.addAttribute("selectAllClazz", organizationService.upGetAllInfo(clazzMapper.selectAllClazz()));
+			model.addAttribute("selectAllFaculty",
+					organizationService.facultyUpGetAllInfo(clazzMapper.selectAllFaculty()));
+
+			model.addAttribute("clazz", new Clazz());
+			model.addAttribute("facultyList", null);
+			model.addAttribute("faculty", new Faculty());
+			model.addAttribute("collegeList", clazzMapper.selectAllCollege());
+			return "clazzInfoIndex";
+
+		}
+		clazzMapper.deleteFacultyById(facultyId);
+		model.addAttribute("selectAllClazz", organizationService.upGetAllInfo(clazzMapper.selectAllClazz()));
+		model.addAttribute("selectAllFaculty", organizationService.facultyUpGetAllInfo(clazzMapper.selectAllFaculty()));
+
+		model.addAttribute("clazz", new Clazz());
+		model.addAttribute("facultyList", null);
+		model.addAttribute("faculty", new Faculty());
+		model.addAttribute("collegeList", clazzMapper.selectAllCollege());
+		return "clazzInfoIndex";
+
+	}
+
+	@PostMapping("/updateFaculty/{facultyId}")
+	String updateFacultyById(Model model, @PathVariable("facultyId") String facultyId, final Faculty faculty) {
+		clazzMapper.updateFacultyById(faculty.getFaculty(), facultyId);
+		model.addAttribute("selectAllClazz", organizationService.upGetAllInfo(clazzMapper.selectAllClazz()));
+		model.addAttribute("selectAllFaculty", organizationService.facultyUpGetAllInfo(clazzMapper.selectAllFaculty()));
+
+		model.addAttribute("clazz", new Clazz());
+		model.addAttribute("facultyList", null);
+		model.addAttribute("faculty", new Faculty());
+		model.addAttribute("collegeList", clazzMapper.selectAllCollege());
+		return "clazzInfoIndex";
+
+	}
+
+}

@@ -1,0 +1,49 @@
+<html xmlns="http://www.thymeleaf.org">
+
+<body>
+	<h1>刷题网站url选择和相应的权值分配</h1>
+	<fieldset>
+		<legend>
+			查询</legend>
+		<span style="color: green;" th:if="${sumIsOk}" th:text="$sumIsOk}k"></span>
+		<span style="color: red;" th:if="${sumIsError}" th:text="${sumIsError}"></span>
+		<p>-----------------------------------------------------------------------</p>
+		<table>
+			<tr>
+				<th>刷题网站</th>
+				<th>权值</th>
+				<th>修改权值</th>
+				<th>删除</th>
+			</tr>
+			<tr th:each="info:${urlList}">
+				<td><a th:href="@{'https://'+${info.webSiteUrl}}" th:text=" ${info.webSiteUrl}"></a></td>
+				<td th:text="${info.urlPower}">
+				<td>
+					<form th:action="@{/urlAndPowerInfo/updatePower/{url}(url=${info.webSiteUrl})}" th:object="${urlAndPower}"
+						method="post">
+						<input type="number" min="0" max="1" step="0.1" placeholder="修改权值" th:field="*{urlPower}">
+						<input type="submit" value="修改">
+					</form>
+				</td>
+				<td><a th:href="@{/urlAndPowerInfo/delete/{webSiteUrl}(webSiteUrl=${info.webSiteUrl})}">删除</a></td>
+			</tr>
+		</table>
+	</fieldset>
+	<fieldset>
+		<legend>
+			添加</legend>
+		<span style="color: red;" th:if="${writeError}" th:text="${writeError}"></span>
+		<form th:action="@{/urlAndPowerInfo/insert}" th:object="${urlAndPower}" method="post">
+			<label>刷题网站地址</label>
+			<input type="text" th:field="*{webSiteUrl}" placeholder="eg. www.leetcode.cn" required>
+			<p />
+			<label>刷题网站权值</label>
+			<input type="number" min="0" max="1" step="0.1" th:field="*{urlPower}" placeholder="0<x<1" required>
+			<p />
+			<input type="submit" value="提交">
+		</form>
+	</fieldset>
+	<a th:href="@{/admin/index}">返回管理员主页</a>
+</body>
+
+</html>

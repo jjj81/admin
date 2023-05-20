@@ -1,30 +1,58 @@
 <html xmlns="http://www.thymeleaf.org">
 
+
 <body>
 	<h1>教师信息管理</h1>
-	<fieldset>
-		<legend>添加老师</legend>
-		<form th:action="@{/teacherInfo/insert}" th:object="${teacher}" method="post">
-			<lable>请添加工号：</lable>
-			<input type="text" maxlength="12" minlength="12" th:field="*{teacherId}" placeholder="12位数字" required>
-			<p />
-			<input type="submit" value="提交">
-		</form>
-	</fieldset>
 
 	<fieldset>
-		<legend>查询所有教师信息</legend>
-
+		<legend>search</legend>
+		<span style="color: red;" th:if="${powerExist}" th:text="${powerExist}"></span>
 		<table>
 			<tr>
 				<th>教师工号</th>
+				<th>姓名</th>
+				<th>院</th>
+				<th>系</th>
+				<th>该教师能管理的班级</th>
 				<th>删除</th>
 			</tr>
-			<tr th:each="teacherInfo:${teacherInfoList}">
-				<td th:text="${teacherInfo.teacherId}">null</td>
-				<td><a th:href="@{/teacherInfo/delete/{teacherId}(teacherId=${teacherInfo.teacherId})}">删除</a></td>
+			<tr th:each="t:${teacherInfoList}">
+				<td th:text="${t.teacherId}">
+				<td th:text="${t.teacherName}">
+				<td th:text="${t.college}">
+				<td th:text="${t.faculty}">
+				<td><a th:href="@{/teacherPowerToClass/{teacherId}(teacherId=${t.teacherId})}">查看</a></td>
+				<td><a th:href="@{/teacherInfo/delete/{teacherId}(teacherId=${t.teacherId})}">删除</a></td>
 			</tr>
 		</table>
+	</fieldset>
+
+	<fieldset>
+		<legend>insert</legend>
+		<span style="color: red;" th:text="${userExist}" th:if="${userExist}">
+		</span>
+		<form th:action="@{/teacherInfo/fixTheFaculty}" th:object="${college}" method="post">
+			<label>选择学院</label>
+			<select th:field="*{id}">
+				<option th:each="c:${collegeList}" th:value="${c.id}" th:text="${c.college}">
+			</select>
+			<input type="submit" value="确定">
+		</form>
+
+		<form th:action="@{/teacherInfo/insert/{collegeId}(collegeId=${collegeId})}" th:object="${teacher}" method="post">
+			<label>选择系</label>
+			<select th:field="*{faculty}">
+				<option th:each="faculty:${facultyList}" th:value="${faculty.faculty}" th:text="${faculty.faculty}">
+			</select>
+			<p />
+			<lable>请添加工号：</lable>
+			<input type="text" maxlength="12" minlength="12" th:field="*{teacherId}" placeholder="12位数字" required>
+			<p />
+			<label>教师姓名:</label>
+			<input type="text" placeholder="name" th:field="*{teacherName}" required>
+			<p />
+			<input type="submit" value="提交">
+		</form>
 	</fieldset>
 	<a th:href="@{/admin/index}">返回管理员主页</a>
 </body>

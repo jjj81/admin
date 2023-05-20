@@ -1,6 +1,11 @@
 package com.zut.admin.controller;
 
-import com.zut.admin.mapper.*;
+import com.zut.admin.entity.Clazz;
+import com.zut.admin.entity.College;
+import com.zut.admin.entity.Faculty;
+import com.zut.admin.mapper.ClazzMapper;
+import com.zut.admin.mapper.TeacherPowerToClassMapper;
+import com.zut.admin.service.OrganizationService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,72 +16,106 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.zut.admin.entity.*;
-
 @Controller
 @RequestMapping("/teacherPowerToClass")
 public class TeacherPowerToClassController {
 	@Autowired
 	private TeacherPowerToClassMapper teacherPowerToClassMapper;
-	@Autowired
-	private TeacherInfoMapper teacherInfoMapper;
-	@Autowired
-	private ClassesInfoMapper classesInfoMapper;
 
-	@GetMapping("/index")
-	String searchAllTeacher(Model model) {
-		model.addAttribute("teacherInfoList", teacherInfoMapper.searchAllTeacher());
-		return "searchAllTeacherInfo";
-	}
+	@Autowired
+	private ClazzMapper clazzMapper;
+
+	@Autowired
+	private OrganizationService organizationService;
 
 	@GetMapping("/{teacherId}")
-	String searchTeacherPowerToClass(Model model, @PathVariable("teacherId") String teacherId) {
+	String getIndex(@PathVariable("teacherId") String teacherId, Model model) {
 
-		model.addAttribute("powerToClass", new TeacherPowerToClass());
-		model.addAttribute("classList", classesInfoMapper.searchAllClasses());
-		model.addAttribute("powerToClassList", teacherPowerToClassMapper.searchTeacherByTeacherId(teacherId));
 		model.addAttribute("teacherId", teacherId);
-		return "teacherPowerToClassPersonalIndex";
+		model.addAttribute("collegeList", clazzMapper.selectAllCollege());
+		model.addAttribute("college", new College());
+		model.addAttribute("faculty", new Faculty());
+		model.addAttribute("clazz", new Clazz());
+		model.addAttribute("powerToClassList", organizationService
+				.upGetAllInfo(teacherPowerToClassMapper.searchTeacherByTeacherId(teacherId), teacherId));
+
+		return "teacherPowerToClass";
+	}
+
+	@PostMapping("/fixTheFaculty")
+	String fixTheFaculty(Model model, final College college, @RequestParam("teacherId") String teacherId) {
+
+		model.addAttribute("teacherId", teacherId);
+		model.addAttribute("college", new College());
+		model.addAttribute("faculty", new Faculty());
+		model.addAttribute("clazz", new Clazz());
+		model.addAttribute("collegeList", clazzMapper.selectAllCollege());
+		model.addAttribute("facultyList", clazzMapper.selectFacultyByParentId(college.getId()));
+		model.addAttribute("powerToClassList", organizationService
+				.upGetAllInfo(teacherPowerToClassMapper.searchTeacherByTeacherId(teacherId), teacherId));
+
+		return "teacherPowerToClass";
+	}
+
+	@PostMapping("/fixTheClazz")
+	String fixTheClazz(Model model, final Faculty faculty, @RequestParam("teacherId") String teacherId) {
+
+		model.addAttribute("teacherId", teacherId);
+		model.addAttribute("college", new College());
+		model.addAttribute("faculty", new Faculty());
+		model.addAttribute("clazz", new Clazz());
+		model.addAttribute("collegeList", clazzMapper.selectAllCollege());
+		model.addAttribute("facultyList",
+				clazzMapper.selectFacultyById(faculty.getId()));
+		model.addAttribute("clazzList", clazzMapper.selectClazzByFacultyId(faculty.getId()));
+		model.addAttribute("powerToClassList", organizationService
+				.upGetAllInfo(teacherPowerToClassMapper.searchTeacherByTeacherId(teacherId), teacherId));
+
+		return "teacherPowerToClass";
 	}
 
 	@PostMapping("/insert")
-	String insertPowerToClass(final TeacherPowerToClass teacherPowerToClass, Model model,
-			@RequestParam("teacherId") String teacherId) {
+	String insertToTable(Model model, final Clazz clazz, @RequestParam("teacherId") String teacherId) {
+		if (teacherPowerToClassMapper.selectPowerByIdAndId(teacherId, clazz.getId()) != null) {
+			model.addAttribute("teacherId", teacherId);
+			model.addAttribute("college", new College());
+			model.addAttribute("faculty", new Faculty());
+			model.addAttribute("clazz", new Clazz());
 
-		for (TeacherPowerToClass t : teacherPowerToClassMapper.searchTeacherByTeacherId(teacherId)) {
-			if (t.getClassName().equals(teacherPowerToClass.getClassName()) == true) {
-				model.addAttribute("powerToClass", new TeacherPowerToClass());
-				model.addAttribute("classList", classesInfoMapper.searchAllClasses());
-				model.addAttribute("powerToClassList", teacherPowerToClassMapper.searchTeacherByTeacherId(teacherId));
-				model.addAttribute("teacherId", teacherId);
-
-				return "teacherPowerToClassExist";
-			}
+			model.addAttribute("collegeList", clazzMapper.selectAllCollege());
+			model.addAttribute("powerToClassList", organizationService
+					.upGetAllInfo(teacherPowerToClassMapper.searchTeacherByTeacherId(teacherId), teacherId));
+			model.addAttribute("duplicate", "该教师已能管理该班级，请勿重复添加!!!!!");
+			return "teacherPowerToClass";
 		}
-
-		teacherPowerToClass.setTeacherId(teacherId);
-		teacherPowerToClassMapper.insertPowerToClass(teacherPowerToClass);
-
-		model.addAttribute("powerToClass", new TeacherPowerToClass());
-		model.addAttribute("classList", classesInfoMapper.searchAllClasses());
-		model.addAttribute("powerToClassList", teacherPowerToClassMapper.searchTeacherByTeacherId(teacherId));
 		model.addAttribute("teacherId", teacherId);
+		model.addAttribute("college", new College());
+		model.addAttribute("faculty", new Faculty());
+		model.addAttribute("clazz", new Clazz());
 
-		return "teacherPowerToClassPersonalIndex";
+		model.addAttribute("collegeList", clazzMapper.selectAllCollege());
 
+		teacherPowerToClassMapper.insertPowerToClass(teacherId, clazz.getId());
+		model.addAttribute("powerToClassList", organizationService
+				.upGetAllInfo(teacherPowerToClassMapper.searchTeacherByTeacherId(teacherId), teacherId));
+		return "teacherPowerToClass";
 	}
 
 	@GetMapping("/delete")
-	String deleteTeacherPowerToClass(Model model,
-			@RequestParam("className") String className, @RequestParam("teacherId") String teacherId) {
-		teacherPowerToClassMapper.deleteTeacherPowerToClassByClassName(className);
+	String deletePowerToClass(@RequestParam("teacherId") String teacherId, @RequestParam("clazzId") Integer clazzId,
+			Model model) {
 
-		model.addAttribute("powerToClass", new TeacherPowerToClass());
-		model.addAttribute("classList", classesInfoMapper.searchAllClasses());
-		model.addAttribute("powerToClassList", teacherPowerToClassMapper.searchTeacherByTeacherId(teacherId));
+		teacherPowerToClassMapper.deletePowerByIdAndId(teacherId, clazzId);
 		model.addAttribute("teacherId", teacherId);
-		return "teacherPowerToClassPersonalIndex";
+		model.addAttribute("college", new College());
+		model.addAttribute("faculty", new Faculty());
+		model.addAttribute("clazz", new Clazz());
 
+		model.addAttribute("collegeList", clazzMapper.selectAllCollege());
+
+		model.addAttribute("powerToClassList", organizationService
+				.upGetAllInfo(teacherPowerToClassMapper.searchTeacherByTeacherId(teacherId), teacherId));
+
+		return "teacherPowerToClass";
 	}
-
 }

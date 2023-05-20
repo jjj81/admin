@@ -17,13 +17,14 @@ public interface TeacherPowerToClassMapper {
 	@Select("select * from teacherPowerToClass where teacherId=#{teacherId}")
 	List<TeacherPowerToClass> searchTeacherByTeacherId(String teacherId);
 
-	@Insert("insert into teacherPowerToClass(teacherId,className) values(#{teacherId},#{className})")
-	void insertPowerToClass(TeacherPowerToClass teacherPowerToClass);
+	@Select("select * from teacherPowerToClass where teacherId=#{teacherId} and clazzId=#{clazzId}")
+	TeacherPowerToClass selectPowerByIdAndId(String teacherId, Integer clazzId);
 
-	@Delete("delete from teacherPowerToClass where className=#{className}")
-	void deleteTeacherPowerToClassByClassName(String className);
+	@Insert("insert into teacherPowerToClass(teacherId,clazzId) values(#{teacherId},#{clazzId})")
+	void insertPowerToClass(String teacherId, Integer clazzId);
 
-	@Delete("delete from teacherPowerToClass where teacherId=#{teacherId}")
-	void deleteTeacherPowerToClassByTeacherId(String teacherId);
+
+	@Delete("delete from teacherPowerToClass where teacherId=#{teacherId} and clazzId=#{clazzId}")
+	int deletePowerByIdAndId(String teacherId, Integer clazzId);
 
 }
