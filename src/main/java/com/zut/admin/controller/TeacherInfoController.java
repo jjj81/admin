@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/teacherInfo")
@@ -35,7 +36,6 @@ public class TeacherInfoController {
 		model.addAttribute("teacherInfoList", teacherInfoMapper.searchAllTeacher());
 		model.addAttribute("collegeList", clazzMapper.selectAllCollege());
 		model.addAttribute("college", new College());
-		model.addAttribute("facultyList", null);
 		model.addAttribute("teacher", new TeacherInfo());
 		return "teacherInfoIndex";
 	}
@@ -98,5 +98,17 @@ public class TeacherInfoController {
 		model.addAttribute("teacher", new TeacherInfo());
 		return "teacherInfoIndex";
 
+	}
+
+	@PostMapping("/updateAdminMessage")
+	String updateAdminMessage(Model model, final TeacherInfo teacherInfo,@RequestParam("teacherId")String teacherId) {
+		teacherInfoMapper.updateAdminMessage(teacherInfo.getAdminMessage(), teacherId);
+
+		model.addAttribute("teacherInfoList", teacherInfoMapper.searchAllTeacher());
+		model.addAttribute("collegeList", clazzMapper.selectAllCollege());
+		model.addAttribute("college", new College());
+		model.addAttribute("teacher", new TeacherInfo());
+
+		return "teacherInfoIndex";
 	}
 }

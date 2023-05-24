@@ -1,12 +1,19 @@
 <html xmlns="http://www.thymeleaf.org">
+<style>
+	.error {
+		color: red;
+	}
 
+</style>
 
 <body>
 	<h1>教师信息管理</h1>
 
 	<fieldset>
 		<legend>search</legend>
-		<span style="color: red;" th:if="${powerExist}" th:text="${powerExist}"></span>
+		<div class="error">
+			<span th:if="${powerExist}" th:text="${powerExist}"></span>
+		</div>
 		<table>
 			<tr>
 				<th>教师工号</th>
@@ -15,6 +22,9 @@
 				<th>系</th>
 				<th>该教师能管理的班级</th>
 				<th>删除</th>
+				<th>教师留言</th>
+				<th>管理员留言</th>
+				<th>修改留言</th>
 			</tr>
 			<tr th:each="t:${teacherInfoList}">
 				<td th:text="${t.teacherId}">
@@ -23,7 +33,15 @@
 				<td th:text="${t.faculty}">
 				<td><a th:href="@{/teacherPowerToClass/{teacherId}(teacherId=${t.teacherId})}">查看</a></td>
 				<td><a th:href="@{/teacherInfo/delete/{teacherId}(teacherId=${t.teacherId})}">删除</a></td>
-			</tr>
+				<td th:text="${t.wantToManageClass}">
+				<td th:text="${t.adminMessage}">
+				<td>
+					<form th:action="@{/teacherInfo/updateAdminMessage(teacherId=${t.teacherId})}" th:object="${teacher}"
+						method="post">
+						<textarea th:field="*{adminMessage}" placeholder="修改管理员留言" required></textarea>
+						<input type="submit" value="修改">
+					</form>
+				</td>
 		</table>
 	</fieldset>
 

@@ -4,6 +4,7 @@ public class TeacherInfo {
 	private String teacherId;
 	private String passWord;
 	private String wantToManageClass;
+	private String adminMessage;
 	private String teacherName;
 	private String college;
 	private String faculty;
@@ -54,6 +55,14 @@ public class TeacherInfo {
 
 	public void setFaculty(String faculty) {
 		this.faculty = faculty;
+	}
+
+	public String getAdminMessage() {
+		return adminMessage;
+	}
+
+	public void setAdminMessage(String adminMessage) {
+		this.adminMessage = adminMessage;
 	}
 
 }
